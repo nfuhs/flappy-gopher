@@ -24,10 +24,15 @@ func newScene(r *sdl.Renderer) (*scene, error) {
 func (s *scene) paint(r *sdl.Renderer) error {
 	r.Clear()
 
-	if err := r.Copy(s, bg, nil, nil); err != nil {
+	if err := r.Copy(s.bg, nil, nil); err != nil {
 		return fmt.Errorf("could not copy background: %v", err)
 	}
 
 	r.Present()
 	return nil
+}
+
+func (s *scene) destroy() {
+	s.bg.Destroy()
+
 }
