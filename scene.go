@@ -20,7 +20,7 @@ func newScene(r *sdl.Renderer) (*scene, error) {
 		return nil, fmt.Errorf("could not load background image: %v", err)
 	}
 
-	b, err := newBird()
+	b, err := newBird(r)
 	if err != nil {
 		return nil, err
 	}
@@ -49,7 +49,6 @@ func (s *scene) run(ctx context.Context, r *sdl.Renderer) <-chan error {
 }
 
 func (s *scene) paint(r *sdl.Renderer) error {
-	s.time++
 
 	r.Clear()
 
