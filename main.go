@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"os"
 	"time"
@@ -48,10 +47,14 @@ func run() error {
 	}
 	defer s.destroy()
 
-	ctx, cancel := context.WithCancel(context.Background())
-	time.AfterFunc(5*time.Second, cancel)
+	events := make(chan sdl.Event)
+	go func() {
+		for {
+			events <- sdl.WaitEvent()
+		}
+	}()
 
-	return <-s.run(ctx, r)
+	return <-s.run(events, r)
 
 }
 
