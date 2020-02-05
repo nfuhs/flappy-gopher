@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"runtime"
 	"time"
 
 	"github.com/veandco/go-sdl2/sdl"
@@ -48,13 +49,16 @@ func run() error {
 	defer s.destroy()
 
 	events := make(chan sdl.Event)
-	go func() {
-		for {
-			events <- sdl.WaitEvent()
-		}
-	}()
+	errc := s.run(events, r)
 
-	return <-s.run(events, r)
+	runtime.LockOSThread()
+	for {
+		select {
+		case events <- sdl.WaitEvent():
+		case err := <-errc:
+			return err
+		}
+	}
 
 }
 

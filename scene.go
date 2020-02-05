@@ -33,11 +33,14 @@ func (s *scene) run(events <-chan sdl.Event, r *sdl.Renderer) <-chan error {
 
 	go func() {
 		defer close(errc)
-		for range time.Tick(10 * time.Millisecond) {
+		tick := time.Tick(10 * time.Millisecond)
+		for {
 			select {
 			case e := <-events:
-				log.Printf("event: %T", e)
-			default:
+				if done := s.handleEvent(e); done {
+					return
+				}
+			case <-tick:
 				if err := s.paint(r); err != nil {
 					errc <- err
 				}
@@ -46,6 +49,20 @@ func (s *scene) run(events <-chan sdl.Event, r *sdl.Renderer) <-chan error {
 	}()
 
 	return errc
+}
+
+func (s *scene) handleEvent(event sdl.Event) bool {
+	switch event.(type) {
+	case *sdl.QuitEvent:
+		return true
+	case *sdl.MouseButtonEvent:
+		s.bird.jump()
+	case *sdl.MouseMotionEvent, *sdl.WindowEvent:
+	default:
+		log.Printf("unknown event %T", event)
+	}
+	return false
+
 }
 
 func (s *scene) paint(r *sdl.Renderer) error {
