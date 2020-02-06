@@ -10,8 +10,8 @@ import (
 )
 
 type scene struct {
-	bg   *sdl.Texture
-	bird *bird
+	bg    *sdl.Texture
+	bird  *bird
 	pipes *pipes
 }
 
@@ -54,10 +54,10 @@ func (s *scene) run(events <-chan sdl.Event, r *sdl.Renderer) <-chan error {
 					time.Sleep(time.Second)
 					s.restart()
 				}
+
 				if err := s.paint(r); err != nil {
 					errc <- err
 				}
-			 }
 			}
 		}
 	}()
@@ -91,9 +91,7 @@ func (s *scene) restart() {
 }
 
 func (s *scene) paint(r *sdl.Renderer) error {
-
 	r.Clear()
-
 	if err := r.Copy(s.bg, nil, nil); err != nil {
 		return fmt.Errorf("could not copy background: %v", err)
 	}
