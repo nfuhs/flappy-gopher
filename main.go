@@ -36,7 +36,7 @@ func run() error {
 
 	defer w.Destroy()
 
-	if err := drawTitle(r); err != nil {
+	if err := drawTitle(r, "Flappy Gopher"); err != nil {
 		return fmt.Errorf("could not draw title: %v", err)
 	}
 
@@ -62,7 +62,7 @@ func run() error {
 
 }
 
-func drawTitle(r *sdl.Renderer) error {
+func drawTitle(r *sdl.Renderer, text string) error {
 	r.Clear()
 	f, err := ttf.OpenFont("res/fonts/Flappy.ttf", 20)
 	if err != nil {

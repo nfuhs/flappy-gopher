@@ -74,7 +74,7 @@ func (ps *pipes) update() {
 	ps.mu.Lock()
 	defer ps.mu.Unlock()
 
-	var rem []*pipes
+	var rem []*pipe
 	for _, p := range ps.pipes {
 		p.mu.Lock()
 		p.x -= ps.speed
